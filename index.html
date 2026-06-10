@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title id="page-title">SAKURITA MODZ — PANEL</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --bg:#04010a;--card:#120a1f;--card-hover:#1a1030;
+  --purple:#9333ea;--purple-bright:#a855f7;
+  --pink:#ec4899;--cyan:#06b6d4;--green:#22c55e;
+  --border:rgba(147,51,234,.25);--text:#f1e8ff;
+  --text-dim:#7c6d91;--text-muted:#4a3d5c;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column;align-items:center}
+
+/* BG */
+.bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg-layer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(147,51,234,.12) 0%,transparent 60%),radial-gradient(ellipse 50% 35% at 80% 80%,rgba(236,72,153,.07) 0%,transparent 55%)}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(147,51,234,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(147,51,234,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+.particle{position:absolute;border-radius:50%;animation:float linear infinite;opacity:0}
+@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+
+/* HEADER */
+.header{position:fixed;top:0;width:100%;z-index:100;background:rgba(4,1,10,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-logo{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;letter-spacing:3px;background:linear-gradient(135deg,var(--purple-bright),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pulse-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+.header-right{font-size:.75rem;color:var(--text-dim);letter-spacing:1px;display:flex;align-items:center;gap:6px}
+.header-right i{color:var(--purple)}
+
+/* PAGE WRAPPER */
+.page{position:relative;z-index:1;width:92%;max-width:420px;padding:90px 0 40px;display:none;flex-direction:column;align-items:center}
+.page.active{display:flex}
+
+/* HOME */
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(147,51,234,.1);border:1px solid rgba(147,51,234,.35);border-radius:100px;padding:6px 16px;font-size:.75rem;letter-spacing:2px;color:var(--purple-bright);margin-bottom:20px;animation:fadeDown .6s ease both}
+.hero-badge i{animation:spin 3s linear infinite;font-size:.65rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,6vw,1.9rem);font-weight:900;text-align:center;line-height:1.2;margin-bottom:10px;animation:fadeDown .7s .1s both}
+.line1{background:linear-gradient(135deg,#fff 30%,var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.line2{background:linear-gradient(135deg,var(--purple-bright),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.hero-sub{text-align:center;color:var(--text-dim);font-size:.9rem;line-height:1.5;max-width:320px;margin-bottom:28px;animation:fadeDown .7s .2s both}
+.stats-row{display:flex;gap:10px;width:100%;margin-bottom:28px;animation:fadeDown .7s .3s both}
+.stat-pill{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 8px;text-align:center}
+.stat-pill .val{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--purple-bright)}
+.stat-pill .lbl{font-size:.7rem;color:var(--text-muted);letter-spacing:1px;margin-top:2px}
+.timer-bar{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;animation:fadeDown .7s .35s both}
+.timer-left{display:flex;align-items:center;gap:8px;color:var(--text-dim)}
+.timer-left i{color:var(--cyan)}
+.timer-value{font-family:'Orbitron',sans-serif;font-size:.85rem;color:var(--cyan);letter-spacing:2px}
+.timer-progress{width:100%;height:3px;background:rgba(255,255,255,.06);border-radius:100px;margin-top:8px;overflow:hidden}
+.timer-fill{height:100%;width:35%;background:linear-gradient(90deg,var(--cyan),var(--purple-bright));border-radius:100px;animation:tpulse 2s ease-in-out infinite}
+@keyframes tpulse{0%,100%{opacity:1}50%{opacity:.6}}
+.section-label{width:100%;display:flex;align-items:center;gap:10px;margin-bottom:14px;animation:fadeDown .7s .4s both}
+.section-label span{font-size:.7rem;letter-spacing:2px;color:var(--text-muted);white-space:nowrap}
+.section-label::before,.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.btn-grid{width:100%;display:flex;flex-direction:column;gap:12px}
+.panel-btn{position:relative;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;transition:transform .2s,border-color .3s,background .3s;text-align:left;animation:fadeUp .5s ease both;width:100%}
+.panel-btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
+.panel-btn.purple::before{background:linear-gradient(135deg,rgba(147,51,234,.12),rgba(168,85,247,.06))}
+.panel-btn.pink::before{background:linear-gradient(135deg,rgba(236,72,153,.12),rgba(244,114,182,.06))}
+.panel-btn.cyan::before{background:linear-gradient(135deg,rgba(6,182,212,.12),rgba(34,211,238,.06))}
+.panel-btn:hover{transform:translateY(-2px);background:var(--card-hover)}
+.panel-btn:hover::before{opacity:1}
+.purple:hover{border-color:rgba(147,51,234,.7);box-shadow:0 8px 30px rgba(147,51,234,.2)}
+.pink:hover{border-color:rgba(236,72,153,.7);box-shadow:0 8px 30px rgba(236,72,153,.2)}
+.cyan:hover{border-color:rgba(6,182,212,.7);box-shadow:0 8px 30px rgba(6,182,212,.2)}
+.panel-btn:active{transform:scale(.98)}
+.btn-inner{position:relative;z-index:1;padding:16px 18px;display:flex;align-items:center;gap:14px}
+.btn-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.purple .btn-icon{background:rgba(147,51,234,.18);color:var(--purple-bright);border:1px solid rgba(147,51,234,.3)}
+.pink .btn-icon{background:rgba(236,72,153,.18);color:#f472b6;border:1px solid rgba(236,72,153,.3)}
+.cyan .btn-icon{background:rgba(6,182,212,.18);color:#22d3ee;border:1px solid rgba(6,182,212,.3)}
+.btn-text{flex:1}
+.btn-name{font-family:'Orbitron',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:1.5px;margin-bottom:3px}
+.purple .btn-name{color:var(--purple-bright)}.pink .btn-name{color:#f472b6}.cyan .btn-name{color:#22d3ee}
+.btn-desc{font-size:.78rem;color:var(--text-muted)}
+.btn-arrow{color:var(--text-muted);font-size:.8rem;transition:transform .2s,color .2s}
+.panel-btn:hover .btn-arrow{transform:translateX(4px)}
+.purple:hover .btn-arrow{color:var(--purple-bright)}.pink:hover .btn-arrow{color:#f472b6}.cyan:hover .btn-arrow{color:#22d3ee}
+.btn-shimmer{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,currentColor,transparent);opacity:0;transition:opacity .3s}
+.panel-btn:hover .btn-shimmer{opacity:.5}
+.purple .btn-shimmer{color:var(--purple-bright)}.pink .btn-shimmer{color:#f472b6}.cyan .btn-shimmer{color:#22d3ee}
+
+/* BACK BTN */
+.back-btn{align-self:flex-start;display:flex;align-items:center;gap:8px;color:var(--text-dim);font-size:.8rem;letter-spacing:1px;cursor:pointer;margin-bottom:22px;padding:6px 0;transition:color .2s}
+.back-btn:hover{color:var(--purple-bright)}
+
+/* ADS PAGE — BLOQUES */
+.ads-panel-tag{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:3px;color:var(--purple-bright);margin-bottom:6px;text-align:center}
+.ads-main-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.5rem,7vw,2rem);font-weight:900;text-align:center;margin-bottom:6px;background:linear-gradient(135deg,#fff,var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ads-sub{text-align:center;color:var(--text-dim);font-size:.85rem;margin-bottom:24px;line-height:1.5}
+.bloques-wrap{width:100%;display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.bloque-card{width:100%;background:var(--card);border-radius:16px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.bloque-card:hover{transform:translateY(-2px)}
+.bloque-header{padding:14px 18px 12px;display:flex;align-items:center;gap:12px}
+.bloque-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.bloque-info{flex:1}
+.bloque-name{font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:1px;margin-bottom:2px}
+.bloque-meta{font-size:.75rem;color:var(--text-muted)}
+.bloque-badge{font-size:.6rem;letter-spacing:1px;padding:3px 10px;border-radius:100px;font-family:'Orbitron',sans-serif;font-weight:700}
+.bloque-body{padding:0 18px 16px}
+.bloque-desc{font-size:.82rem;color:var(--text-dim);line-height:1.5;margin-bottom:14px}
+.bloque-timer-row{display:flex;align-items:center;gap:8px;background:rgba(147,51,234,.08);border:1px solid rgba(147,51,234,.2);border-radius:10px;padding:9px 12px;margin-bottom:14px;font-size:.8rem}
+.bloque-timer-row i{color:var(--purple-bright)}
+.bloque-timer-row span{color:var(--text-dim);flex:1}
+.bloque-timer-row b{color:var(--purple-bright);font-family:'Orbitron',sans-serif;font-size:.75rem}
+.bloque-btn{width:100%;padding:14px;border:none;border-radius:10px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,box-shadow .2s;color:#fff}
+.bloque-btn:active{transform:scale(.97)}
+.bloque-rapido{border:1px solid rgba(6,182,212,.35)}
+.bloque-rapido:hover{box-shadow:0 8px 30px rgba(6,182,212,.2);border-color:rgba(6,182,212,.6)}
+.bloque-rapido .bloque-header{background:linear-gradient(135deg,rgba(6,182,212,.12),rgba(34,211,238,.04))}
+.bloque-rapido .bloque-icon{background:rgba(6,182,212,.18);color:#22d3ee;border:1px solid rgba(6,182,212,.3)}
+.bloque-rapido .bloque-name{color:#22d3ee}
+.bloque-rapido .bloque-badge{background:rgba(6,182,212,.2);color:#22d3ee;border:1px solid rgba(6,182,212,.3)}
+.bloque-rapido .bloque-btn{background:linear-gradient(135deg,#0ea5e9,#06b6d4);box-shadow:0 4px 20px rgba(6,182,212,.3)}
+.bloque-rapido .bloque-btn:hover{box-shadow:0 6px 28px rgba(6,182,212,.5);transform:translateY(-2px)}
+.bloque-lento{border:1px solid rgba(147,51,234,.35)}
+.bloque-lento:hover{box-shadow:0 8px 30px rgba(147,51,234,.2);border-color:rgba(147,51,234,.6)}
+.bloque-lento .bloque-header{background:linear-gradient(135deg,rgba(147,51,234,.12),rgba(168,85,247,.04))}
+.bloque-lento .bloque-icon{background:rgba(147,51,234,.18);color:var(--purple-bright);border:1px solid rgba(147,51,234,.3)}
+.bloque-lento .bloque-name{color:var(--purple-bright)}
+.bloque-lento .bloque-badge{background:rgba(147,51,234,.2);color:var(--purple-bright);border:1px solid rgba(147,51,234,.3)}
+.bloque-lento .bloque-btn{background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 4px 20px rgba(147,51,234,.3)}
+.bloque-lento .bloque-btn:hover{box-shadow:0 6px 28px rgba(147,51,234,.5);transform:translateY(-2px)}
+
+/* ── ZONA COMPARTIDA (rápido y lento usan el mismo layout) ── */
+.zona-header{width:100%;text-align:center;margin-bottom:20px}
+.zona-badge-rapido{display:inline-flex;align-items:center;gap:8px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.35);border-radius:100px;padding:6px 16px;font-size:.7rem;letter-spacing:2px;color:#22d3ee;margin-bottom:12px}
+.zona-badge-lento{display:inline-flex;align-items:center;gap:8px;background:rgba(147,51,234,.1);border:1px solid rgba(147,51,234,.35);border-radius:100px;padding:6px 16px;font-size:.7rem;letter-spacing:2px;color:var(--purple-bright);margin-bottom:12px}
+.zona-title{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;margin-bottom:6px}
+.zona-title.rapido{background:linear-gradient(135deg,#fff,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.zona-title.lento{background:linear-gradient(135deg,#fff,var(--purple-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.zona-sub{font-size:.85rem;color:var(--text-dim);line-height:1.5}
+
+/* dots */
+.zona-dots{display:flex;justify-content:center;gap:8px;margin-bottom:24px}
+.zona-dot{width:10px;height:10px;border-radius:50%;background:var(--card);border:1px solid var(--border);transition:all .3s}
+.zona-dot.done{background:var(--green);border-color:var(--green);box-shadow:0 0 8px rgba(34,197,94,.5)}
+.zona-dot.active.rapido{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 8px rgba(6,182,212,.5);animation:dotpulse 1.5s ease-in-out infinite}
+.zona-dot.active.lento{background:var(--purple-bright);border-color:var(--purple-bright);box-shadow:0 0 8px rgba(147,51,234,.5);animation:dotpulse 1.5s ease-in-out infinite}
+@keyframes dotpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+/* cooldown bar */
+.cooldown-bar{width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:100px;overflow:hidden;margin-bottom:16px}
+.cooldown-fill{height:100%;border-radius:100px;width:0%}
+.cooldown-fill.rapido{background:linear-gradient(90deg,var(--cyan),var(--purple-bright))}
+.cooldown-fill.lento{background:linear-gradient(90deg,var(--purple),var(--purple-bright))}
+
+/* ── AD SLOT — igual en ambos ── */
+.ad-slot-card{
+  width:100%;
+  background:var(--card);
+  border-radius:16px;
+  overflow:hidden;       /* permite que el anuncio llene */
+  margin-bottom:18px;
+  /* sin padding, sin min-height fijo → el anuncio dicta el tamaño */
+  display:block;
+  position:relative;
+}
+.ad-slot-label{
+  font-size:.7rem;letter-spacing:2px;color:var(--text-muted);
+  text-align:center;padding:14px;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.ad-slot-inner{
+  width:100%;
+  min-height:250px;      /* suficiente para que el banner 300x250 quepa */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+/* el div que inyecta effectivecpm necesita ancho completo */
+.ad-slot-inner > div,
+.ad-slot-inner iframe,
+.ad-slot-inner ins{
+  width:100% !important;
+  max-width:100% !important;
+  display:block;
+}
+
+/* bordes coloreados */
+.ad-slot-card.rapido{border:1px solid rgba(6,182,212,.3)}
+.ad-slot-card.lento{border:1px solid rgba(147,51,234,.3)}
+
+/* next btn */
+.zona-next-btn{width:100%;padding:16px;border:none;border-radius:12px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;transition:transform .15s,box-shadow .2s;position:relative;overflow:hidden}
+.zona-next-btn.rapido{background:linear-gradient(135deg,#0ea5e9,#06b6d4);box-shadow:0 4px 20px rgba(6,182,212,.3)}
+.zona-next-btn.rapido:hover:not(:disabled){box-shadow:0 6px 28px rgba(6,182,212,.5);transform:translateY(-2px)}
+.zona-next-btn.lento{background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 4px 20px rgba(147,51,234,.3)}
+.zona-next-btn.lento:hover:not(:disabled){box-shadow:0 6px 28px rgba(147,51,234,.5);transform:translateY(-2px)}
+.zona-next-btn:active{transform:scale(.97)}
+.zona-next-btn:disabled{opacity:.5;cursor:default;transform:none!important;box-shadow:none!important}
+
+/* ENTREGA KEY */
+.key-wrap{width:100%;text-align:center}
+.key-icon{font-size:3rem;margin-bottom:16px;animation:bounceIn .6s ease}
+@keyframes bounceIn{0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+.key-title{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:900;color:var(--green);margin-bottom:8px}
+.key-sub{font-size:.9rem;color:var(--text-dim);margin-bottom:24px;line-height:1.5}
+.key-box{background:var(--card);border:1px solid rgba(34,197,94,.4);border-radius:14px;padding:20px;margin-bottom:16px}
+.key-label{font-size:.7rem;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px}
+.key-value{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;color:var(--green);letter-spacing:3px;word-break:break-all}
+.key-copy-btn{margin-top:14px;width:100%;padding:12px;border:1px solid rgba(34,197,94,.4);border-radius:10px;background:rgba(34,197,94,.1);color:var(--green);font-family:'Orbitron',sans-serif;font-size:.8rem;cursor:pointer;transition:all .2s;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:8px}
+.key-copy-btn:hover{background:rgba(34,197,94,.2)}
+.key-info{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;font-size:.82rem;color:var(--text-dim);line-height:1.6;margin-bottom:16px}
+.key-home-btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--purple-bright));color:#fff;font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:1px;cursor:pointer;transition:box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.key-home-btn:hover{box-shadow:0 6px 24px rgba(147,51,234,.5)}
+
+/* FOOTER */
+.footer{position:relative;z-index:1;margin-top:30px;padding-bottom:30px;text-align:center;font-size:.72rem;color:var(--text-muted);letter-spacing:1px}
+.footer span{color:var(--purple)}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1px solid var(--border);border-radius:100px;padding:10px 22px;font-size:.82rem;color:var(--text);display:flex;align-items:center;gap:8px;box-shadow:0 10px 40px rgba(0,0,0,.5);transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:200;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast i{color:var(--purple-bright)}
+
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="bg-layer"><div class="bg-grid"></div></div>
+<div class="particles" id="particles"></div>
+
+<header class="header">
+  <div class="header-left">
+    <div class="pulse-dot"></div>
+    <div class="header-logo" id="hdr-logo">SAKURITA MODZ</div>
+  </div>
+  <div class="header-right"><i class="fas fa-shield-halved"></i><span id="hdr-version">PANEL v2.4</span></div>
+</header>
+
+<!-- ══ HOME ══ -->
+<div class="page active" id="pg-home">
+  <div class="hero-badge"><i class="fas fa-bolt"></i><span id="badge-text">KEYS DISPONIBLES HOY</span></div>
+  <h1 class="hero-title"><span class="line1" id="title-line1">KEYS GRATIS</span><span class="line2" id="title-line2">SAKURITA MODZ</span></h1>
+  <p class="hero-sub" id="hero-sub">Selecciona el panel del cual deseas obtener tu Key de 24h.<br>Solo una elección permitida cada 2 horas.</p>
+  <div class="stats-row">
+    <div class="stat-pill"><div class="val" id="stat-views">—</div><div class="lbl">VISITAS</div></div>
+    <div class="stat-pill"><div class="val" id="stat-panels">—</div><div class="lbl">PANELES</div></div>
+    <div class="stat-pill"><div class="val" id="stat-duration">24H</div><div class="lbl">KEY GRATIS</div></div>
+  </div>
+  <div class="timer-bar">
+    <div style="width:100%">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="timer-left"><i class="fas fa-clock"></i><span>PRÓXIMO CLAIM</span></div>
+        <div class="timer-value" id="timer">02:00:00</div>
+      </div>
+      <div class="timer-progress"><div class="timer-fill"></div></div>
+    </div>
+  </div>
+  <div class="section-label"><span>ELIGE TU PANEL</span></div>
+  <div class="btn-grid" id="btn-grid"></div>
+</div>
+
+<!-- ══ ADS — BLOQUES ══ -->
+<div class="page" id="pg-ads">
+  <div class="back-btn" onclick="goTo('pg-home')"><i class="fas fa-arrow-left"></i> VOLVER</div>
+  <div class="ads-panel-tag" id="ads-panel-name">SAKURITA MODZ</div>
+  <div class="ads-main-title">Key gratis</div>
+  <p class="ads-sub">Free Fire · <b style="color:var(--purple-bright)">Elige tu bloque</b></p>
+  <div class="bloques-wrap">
+    <!-- Rápido -->
+    <div class="bloque-card bloque-rapido">
+      <div class="bloque-header">
+        <div class="bloque-icon"><i class="fas fa-bolt"></i></div>
+        <div class="bloque-info"><div class="bloque-name">BLOQUE RÁPIDO</div><div class="bloque-meta">~2 horas de acceso</div></div>
+        <div class="bloque-badge">⚡ RÁPIDO</div>
+      </div>
+      <div class="bloque-body">
+        <p class="bloque-desc">Pasa por <b style="color:#22d3ee">3 zonas de anuncios</b> cortos y obtén tu key de 2 horas.</p>
+        <button class="bloque-btn" onclick="iniciarRapido()"><i class="fas fa-bolt"></i> EMPEZAR · 2H</button>
+      </div>
+    </div>
+    <!-- Lento -->
+    <div class="bloque-card bloque-lento">
+      <div class="bloque-header">
+        <div class="bloque-icon"><i class="fas fa-fire"></i></div>
+        <div class="bloque-info"><div class="bloque-name">BLOQUE LENTO</div><div class="bloque-meta">~5 horas de acceso</div></div>
+        <div class="bloque-badge">🔥 +TIEMPO</div>
+      </div>
+      <div class="bloque-body">
+        <p class="bloque-desc">Pasa por <b style="color:var(--purple-bright)">2 zonas de anuncios</b> y obtén tu key de 5 horas.</p>
+        <div class="bloque-timer-row"><i class="fas fa-hourglass-half"></i><span>Tiempo estimado</span><b>5 — 10 MIN</b></div>
+        <button class="bloque-btn" id="btn-lento" onclick="iniciarLento()"><i class="fas fa-fire"></i> OBTENER KEY · 5H</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ZONA RÁPIDO (3 zonas) ══ -->
+<div class="page" id="pg-zona-rapido">
+  <div class="back-btn" onclick="goTo('pg-ads')"><i class="fas fa-arrow-left"></i> VOLVER</div>
+  <div class="zona-header">
+    <div class="zona-badge-rapido"><i class="fas fa-bolt"></i> BLOQUE RÁPIDO</div>
+    <div class="zona-title rapido" id="zona-r-title">ZONA 1 DE 3</div>
+    <div class="zona-sub" id="zona-r-sub">Espera el anuncio y pulsa <b style="color:#22d3ee">Siguiente</b></div>
+  </div>
+  <div class="zona-dots" id="zona-r-dots"></div>
+  <div class="cooldown-bar"><div class="cooldown-fill rapido" id="cooldown-r-fill"></div></div>
+  <div class="ad-slot-card rapido">
+    <div class="ad-slot-label">ZONA DE ANUNCIO</div>
+    <div class="ad-slot-inner" id="ad-slot-rapido"></div>
+  </div>
+  <button class="zona-next-btn rapido" id="zona-r-btn" onclick="nextZonaRapido()" disabled>
+    <i class="fas fa-lock" id="zona-r-icon"></i>
+    <span id="zona-r-label">Espera <span id="zona-r-cd">15</span>s...</span>
+  </button>
+</div>
+
+<!-- ══ ZONA LENTO (2 zonas) ══ -->
+<div class="page" id="pg-zona-lento">
+  <div class="back-btn" onclick="goTo('pg-ads')"><i class="fas fa-arrow-left"></i> VOLVER</div>
+  <div class="zona-header">
+    <div class="zona-badge-lento"><i class="fas fa-fire"></i> BLOQUE LENTO</div>
+    <div class="zona-title lento" id="zona-l-title">ZONA 1 DE 2</div>
+    <div class="zona-sub" id="zona-l-sub">Espera el anuncio y pulsa <b style="color:var(--purple-bright)">Siguiente</b></div>
+  </div>
+  <div class="zona-dots" id="zona-l-dots"></div>
+  <div class="cooldown-bar"><div class="cooldown-fill lento" id="cooldown-l-fill"></div></div>
+  <div class="ad-slot-card lento">
+    <div class="ad-slot-label">ZONA DE ANUNCIO</div>
+    <div class="ad-slot-inner" id="ad-slot-lento"></div>
+  </div>
+  <button class="zona-next-btn lento" id="zona-l-btn" onclick="nextZonaLento()" disabled>
+    <i class="fas fa-lock" id="zona-l-icon"></i>
+    <span id="zona-l-label">Espera <span id="zona-l-cd">20</span>s...</span>
+  </button>
+</div>
+
+<!-- ══ ENTREGA KEY ══ -->
+<div class="page" id="pg-key">
+  <div class="key-wrap">
+    <div class="key-icon">🎉</div>
+    <div class="key-title">¡KEY OBTENIDA!</div>
+    <p class="key-sub">Tu key está lista. Cópiala y úsala en el panel correspondiente.</p>
+    <div class="key-box">
+      <div class="key-label">TU KEY DE ACCESO</div>
+      <div class="key-value" id="key-value">GENERANDO...</div>
+      <button class="key-copy-btn" onclick="copyKey()"><i class="fas fa-copy"></i> COPIAR KEY</button>
+    </div>
+    <div class="key-info" id="key-info">Key válida por 24 horas. No la compartas con nadie.</div>
+    <button class="key-home-btn" onclick="goTo('pg-home')"><i class="fas fa-home"></i> VOLVER AL INICIO</button>
+  </div>
+</div>
+
+<footer class="footer">© 2024 <span id="footer-brand">SAKURITA MODZ</span> · Todos los derechos reservados</footer>
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toast-msg"></span></div>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const app = initializeApp({
+    apiKey:"AIzaSyBZghuQt5Yv-y8NYewWPGsQr0eS4OGDGpo",
+    authDomain:"keys-28c6e.firebaseapp.com",
+    databaseURL:"https://keys-28c6e-default-rtdb.firebaseio.com",
+    projectId:"keys-28c6e",
+    storageBucket:"keys-28c6e.firebasestorage.app",
+    messagingSenderId:"224924935260",
+    appId:"1:224924935260:web:0fd439c446053c0b553299",
+    measurementId:"G-5SG4XYGT1G"
+  });
+  const analytics = getAnalytics(app);
+  const db = getDatabase(app);
+
+  // Visitas (única por sesión)
+  const VISIT_KEY = 'sm_visited';
+  runTransaction(ref(db,'stats/views'), v => (v||0)+1);
+  if (!sessionStorage.getItem(VISIT_KEY)) {
+    sessionStorage.setItem(VISIT_KEY, '1');
+  }
+  onValue(ref(db,'stats/views'), s => {
+    document.getElementById('stat-views').textContent = (s.val()||0).toLocaleString('es');
+  });
+
+  // Config sitio
+  onValue(ref(db,'config/site'), s => {
+    const c = s.val(); if(!c) return;
+    const set = (id,v) => { if(v){ const el=document.getElementById(id); if(el) el.textContent=v; } };
+    set('hdr-logo',c.headerLogo); set('hdr-version',c.version);
+    set('badge-text',c.badgeText); set('title-line1',c.titleLine1);
+    set('title-line2',c.titleLine2); set('stat-duration',c.duration);
+    set('footer-brand',c.footerBrand);
+    if(c.heroSub) document.getElementById('hero-sub').innerHTML = c.heroSub;
+    if(c.timerHours){ window._timerSecs = c.timerHours*3600; startTimer(); }
+  });
+
+  // Config keys
+  window._keysConfig = {};
+  onValue(ref(db,'config/keys'), s => { window._keysConfig = s.val()||{}; });
+
+  // Paneles
+  const COLORS=['purple','pink','cyan'];
+  const ICONS=['fas fa-store','fas fa-crown','fas fa-gift'];
+  onValue(ref(db,'panels'), s => {
+    const data = s.val();
+    const grid = document.getElementById('btn-grid');
+    grid.innerHTML='';
+    if(!data){ grid.innerHTML='<p style="color:var(--text-muted);text-align:center">No hay paneles activos.</p>'; return; }
+    const panels = Object.entries(data).map(([id,p])=>({id,...p})).filter(p=>p.active!==false).sort((a,b)=>(a.order||99)-(b.order||99));
+    document.getElementById('stat-panels').textContent = panels.length;
+    panels.forEach((panel,i) => {
+      const color=panel.color||COLORS[i%3], icon=panel.icon||ICONS[i%3];
+      const btn=document.createElement('button');
+      btn.className=`panel-btn ${color}`;
+      btn.style.animationDelay=`${.45+i*.1}s`;
+      btn.innerHTML=`<div class="btn-shimmer"></div><div class="btn-inner"><div class="btn-icon"><i class="${icon}"></i></div><div class="btn-text"><div class="btn-name">${panel.name}</div><div class="btn-desc">${panel.desc||'Panel oficial · Key 24 horas'}</div></div><i class="fas fa-chevron-right btn-arrow"></i></div>`;
+      btn.onclick=()=>{ logEvent(analytics,'panel_click',{panel_name:panel.name}); window._currentPanel=panel; showAdsPage(panel); };
+      grid.appendChild(btn);
+    });
+  });
+
+  window._analytics=analytics; window._logEvent=logEvent;
+</script>
+
+<script>
+  // ── Partículas ──
+  const pc=document.getElementById('particles');
+  for(let i=0;i<25;i++){
+    const p=document.createElement('div'); p.className='particle';
+    const sz=Math.random()*3+1, clrs=['#9333ea','#a855f7','#ec4899','#06b6d4','#8b5cf6'];
+    p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;background:${clrs[Math.floor(Math.random()*5)]};box-shadow:0 0 ${sz*3}px currentColor;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*10}s;`;
+    pc.appendChild(p);
+  }
+
+  // ── Timer ──
+  window._timerSecs=7200; let _ti=null;
+  function startTimer(){
+    if(_ti) clearInterval(_ti);
+    _ti=setInterval(()=>{
+      if(window._timerSecs<=0){document.getElementById('timer').textContent='00:00:00';return;}
+      window._timerSecs--;
+      const h=String(Math.floor(window._timerSecs/3600)).padStart(2,'0');
+      const m=String(Math.floor((window._timerSecs%3600)/60)).padStart(2,'0');
+      const s=String(window._timerSecs%60).padStart(2,'0');
+      document.getElementById('timer').textContent=`${h}:${m}:${s}`;
+    },1000);
+  }
+  startTimer();
+
+  // ── Navegación ──
+  function goTo(pageId){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function showAdsPage(panel){
+    document.getElementById('ads-panel-name').textContent = panel.name;
+    goTo('pg-ads');
+  }
+
+  // ═══════════════════════════════════════
+  //  BLOQUE RÁPIDO — 3 ZONAS
+  // ═══════════════════════════════════════
+  const R_ZONAS = 3;
+  const R_WAIT  = 15;
+  let _rActual = 0, _rTimer = null;
+
+  function iniciarRapido(){
+    _rActual = 0;
+    goTo('pg-zona-rapido');
+    cargarZonaRapido(0);
+  }
+
+  function buildDots(containerId, total, actual, tipo){
+    const c = document.getElementById(containerId);
+    c.innerHTML = '';
+    for(let i=0;i<total;i++){
+      const d=document.createElement('div');
+      d.className='zona-dot'+(i<actual?' done':i===actual?' active '+tipo:'');
+      c.appendChild(d);
+    }
+  }
+
+  function cargarZonaRapido(n){
+    buildDots('zona-r-dots', R_ZONAS, n, 'rapido');
+    document.getElementById('zona-r-title').textContent = `ZONA ${n+1} DE ${R_ZONAS}`;
+    document.getElementById('zona-r-sub').innerHTML = n < R_ZONAS-1
+      ? 'Espera el anuncio y pulsa <b style="color:#22d3ee">Siguiente</b>'
+      : '¡Última zona! Espera para obtener tu key';
+
+    // Reset btn
+    const btn  = document.getElementById('zona-r-btn');
+    const lbl  = document.getElementById('zona-r-label');
+    const icon = document.getElementById('zona-r-icon');
+    btn.disabled=true; icon.className='fas fa-lock';
+    lbl.innerHTML=`Espera <span id="zona-r-cd">${R_WAIT}</span>s...`;
+
+    // Inyectar anuncio rápido
+    const slot = document.getElementById('ad-slot-rapido');
+    slot.innerHTML = '';
+    const wrap=document.createElement('div'); wrap.style.width='100%';
+    const sc=document.createElement('script');
+    sc.async=true; sc.setAttribute('data-cfasync','false');
+    sc.src='https://pl29693401.effectivecpmnetwork.com/0933ee16945c48fdf212894eff248ba7/invoke.js';
+    const div=document.createElement('div');
+    div.id='container-0933ee16945c48fdf212894eff248ba7';
+    div.style.width='100%';
+    wrap.appendChild(sc); wrap.appendChild(div);
+    slot.appendChild(wrap);
+
+    // Cooldown bar
+    const fill=document.getElementById('cooldown-r-fill');
+    fill.style.width='0%'; fill.style.transition='none';
+    setTimeout(()=>{ fill.style.transition=`width ${R_WAIT}s linear`; fill.style.width='100%'; },50);
+
+    // Countdown
+    if(_rTimer) clearInterval(_rTimer);
+    let secs=R_WAIT;
+    _rTimer=setInterval(()=>{
+      secs--;
+      const cd=document.getElementById('zona-r-cd');
+      if(cd) cd.textContent=secs;
+      if(secs<=0){
+        clearInterval(_rTimer);
+        btn.disabled=false;
+        icon.className='fas fa-arrow-right';
+        lbl.textContent = n < R_ZONAS-1 ? 'SIGUIENTE ZONA' : 'OBTENER KEY';
+      }
+    },1000);
+  }
+
+  function nextZonaRapido(){
+    _rActual++;
+    if(_rActual >= R_ZONAS) entregarKey('2H');
+    else cargarZonaRapido(_rActual);
+  }
+
+  // ═══════════════════════════════════════
+  //  BLOQUE LENTO — 2 ZONAS
+  // ═══════════════════════════════════════
+  const L_ZONAS = 2;
+  const L_WAIT  = 20;
+  let _lActual = 0, _lTimer = null;
+
+  function iniciarLento(){
+    _lActual = 0;
+    goTo('pg-zona-lento');
+    cargarZonaLento(0);
+  }
+
+  function cargarZonaLento(n){
+    buildDots('zona-l-dots', L_ZONAS, n, 'lento');
+    document.getElementById('zona-l-title').textContent = `ZONA ${n+1} DE ${L_ZONAS}`;
+    document.getElementById('zona-l-sub').innerHTML = n < L_ZONAS-1
+      ? 'Espera el anuncio y pulsa <b style="color:var(--purple-bright)">Siguiente</b>'
+      : '¡Última zona! Espera para obtener tu key';
+
+    // Reset btn
+    const btn  = document.getElementById('zona-l-btn');
+    const lbl  = document.getElementById('zona-l-label');
+    const icon = document.getElementById('zona-l-icon');
+    btn.disabled=true; icon.className='fas fa-lock';
+    lbl.innerHTML=`Espera <span id="zona-l-cd">${L_WAIT}</span>s...`;
+
+    // Inyectar anuncio lento
+    const slot = document.getElementById('ad-slot-lento');
+    slot.innerHTML = '';
+    const wrap=document.createElement('div'); wrap.style.width='100%';
+    const sc=document.createElement('script');
+    sc.async=true;
+    sc.src='https://pl29693400.effectivecpmnetwork.com/18/a7/1a/18a71aff717ae69be719170e98bc5501.js';
+    wrap.appendChild(sc);
+    slot.appendChild(wrap);
+
+    // Cooldown bar
+    const fill=document.getElementById('cooldown-l-fill');
+    fill.style.width='0%'; fill.style.transition='none';
+    setTimeout(()=>{ fill.style.transition=`width ${L_WAIT}s linear`; fill.style.width='100%'; },50);
+
+    // Countdown
+    if(_lTimer) clearInterval(_lTimer);
+    let secs=L_WAIT;
+    _lTimer=setInterval(()=>{
+      secs--;
+      const cd=document.getElementById('zona-l-cd');
+      if(cd) cd.textContent=secs;
+      if(secs<=0){
+        clearInterval(_lTimer);
+        btn.disabled=false;
+        icon.className='fas fa-arrow-right';
+        lbl.textContent = n < L_ZONAS-1 ? 'SIGUIENTE ZONA' : 'OBTENER KEY · 5H';
+      }
+    },1000);
+  }
+
+  function nextZonaLento(){
+    _lActual++;
+    if(_lActual >= L_ZONAS) entregarKey('5H');
+    else cargarZonaLento(_lActual);
+  }
+
+  // ═══════════════════════════════════════
+  //  ENTREGA KEY
+  // ═══════════════════════════════════════
+  function entregarKey(duracion){
+    const panel = window._currentPanel||{};
+    const cfg   = window._keysConfig||{};
+    const key = cfg.keyTemplate
+      ? cfg.keyTemplate.replace('{random}', Math.random().toString(36).substring(2,10).toUpperCase())
+      : 'SKR-'+Math.random().toString(36).substring(2,6).toUpperCase()+'-'+Math.random().toString(36).substring(2,6).toUpperCase()+'-'+duracion;
+    document.getElementById('key-value').textContent = key;
+    document.getElementById('key-info').textContent  = cfg.keyInfo || `Key válida por ${duracion} · ${panel.name||'panel seleccionado'}. No la compartas.`;
+    goTo('pg-key');
+  }
+
+  function copyKey(){
+    const key=document.getElementById('key-value').textContent;
+    navigator.clipboard.writeText(key).then(()=>showToast('¡Key copiada!')).catch(()=>{
+      const ta=document.createElement('textarea'); ta.value=key;
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); showToast('¡Key copiada!');
+    });
+  }
+
+  function showToast(msg,dur=3000){
+    const t=document.getElementById('toast');
+    document.getElementById('toast-msg').textContent=msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),dur);
+  }
+
+  window.goTo=goTo;
+  window.iniciarRapido=iniciarRapido;
+  window.iniciarLento=iniciarLento;
+  window.nextZonaRapido=nextZonaRapido;
+  window.nextZonaLento=nextZonaLento;
+  window.copyKey=copyKey;
+</script>
+</body>
+</html>
